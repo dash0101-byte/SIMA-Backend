@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Monitoreo Ambiental</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/dash.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <%- include('../partials/menu') %>
+
+    <main>
+        <section class="dashboard">
+
+            <div class="page-title">
+                <h2><i class="fas fa-leaf"></i> Monitoreo Ambiental</h2>
+                <p>Calidad del aire y condiciones ambientales en tiempo real</p>
+                <div id="globalBadge" class="badge-global bg-ok">Ambiente saludable</div>
+            </div>
+
+            <div id="alerta" class="alert-banner bg-bad" style="display:none"></div>
+
+            <div class="grid">
+
+                <div class="card card-temperature" data-bs-toggle="tooltip" title="Ideal: 19–24 °C">
+                    <div class="card-header">
+                        <i class="fas fa-thermometer-half"></i>
+                        <span>Temperatura</span>
+                    </div>
+
+                    <div class="card-value">
+                        <span id="temperature">--</span><span class="unit">°C</span>
+                    </div>
+
+                    <div class="card-sub" id="trendTemp">Estable</div>
+                    <div class="card-status" id="tempStatus">--</div>
+                    <canvas id="chartTemp" class="mini-chart"></canvas>
+                </div>
+
+                <div class="card card-humidity" data-bs-toggle="tooltip" title="Ideal: 40–60 %">
+                    <div class="card-header">
+                        <i class="fas fa-tint"></i>
+                        <span>Humedad</span>
+                    </div>
+
+                    <div class="card-value">
+                        <span id="humidity">--</span><span class="unit">%</span>
+                    </div>
+
+                    <div class="card-sub" id="trendHum">Estable</div>
+                    <div class="card-status" id="humStatus">--</div>
+                    <canvas id="chartHum" class="mini-chart"></canvas>
+                </div>
+
+                <div class="card card-co2" data-bs-toggle="tooltip" title="Ideal: menor a 800 ppm">
+                    <div class="card-header">
+                        <i class="fas fa-wind"></i>
+                        <span>CO₂</span>
+                    </div>
+
+                    <div class="card-value">
+                        <span id="co2">--</span><span class="unit">ppm</span>
+                    </div>
+
+                    <div class="card-sub" id="trendCO2">Estable</div>
+                    <div class="card-status" id="co2Status">--</div>
+                    <canvas id="chartCO2" class="mini-chart"></canvas>
+                </div>
+
+                <div class="card card-pressure">
+                    <div class="card-header">
+                        <i class="fas fa-gauge-high"></i>
+                        <span>Presión</span>
+                    </div>
+
+                    <div class="card-value">
+                        <span id="pressure">--</span><span class="unit">hPa</span>
+                    </div>
+
+                    <div class="card-sub">Atmosférica</div>
+                    <div class="card-status status-ok">OK</div>
+                    <canvas id="chartPres" class="mini-chart"></canvas>
+                </div>
+
+                <div class="card card-drone">
+                    <div class="card-header">
+                        <i class="fas fa-drone"></i>
+                        <span>Estado del dron</span>
+                    </div>
+
+                    <div class="card-value drone-state">
+                        <span id="droneState">—</span>
+                    </div>
+
+                    <div class="card-sub" id="droneLocation">
+                        Ubicación desconocida
+                    </div>
+
+                    <div class="card-status status-warn" id="droneStatus">
+                        Sin señal
+                    </div>
+
+                    <div class="card-sub drone-coords">
+                        <span id="droneCoords">Lat: — | Lon: —</span>
+                    </div>
+                </div>
+
+                <div class="card card-gas">
+                    <div class="card-header">
+                        <i class="fas fa-flask"></i>
+                        <span>VOC / Gas</span>
+                    </div>
+
+                    <div class="card-value">
+                        <span id="gas">--</span><span class="unit">Ω</span>
+                    </div>
+
+                    <div class="card-sub" id="trendGas">Estable</div>
+                    <div class="card-status" id="gasStatus">--</div>
+                    <canvas id="chartGas" class="mini-chart"></canvas>
+                </div>
+
+            </div>
+
+            <div class="control-panel">
+                <h3 class="control-title">
+                    <i class="fas fa-info-circle"></i> Estado de la Sesión
+                </h3>
+
+                <% if (!rol || rol === 'vista_previa') { %>
+                    <div class="alert alert-warning text-center">
+                        <i class="fas fa-eye"></i>
+                        <strong>Modo Vista Previa</strong><br>
+                        Estás visualizando los datos del dron en tiempo real.
+                    </div>
+                <% } else if (rol === 'cliente') { %>
+                    <div class="alert alert-success text-center">
+                        <i class="fas fa-user-check"></i>
+                        <strong>Cliente Verificado</strong><br>
+                        Tienes acceso a los datos premium del dron.
+                    </div>
+                <% } else if (rol === 'admin') { %>
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-user-shield"></i>
+                        <strong>Administrador</strong><br>
+                        Acceso total al sistema de monitoreo.
+                    </div>
+                <% } %>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 SIMA - Sistema Integrado de Monitoreo Ambiental</p>
+    </footer>
+
+</div>
+
+<button class="scroll-to-top" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/dashboard.js"></script>
+
+</body>
+</html>

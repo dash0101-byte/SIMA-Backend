@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control | Gestión de Usuarios</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/gestion.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<%- include('../partials/menu') %>
+
+<div class="contenedor">
+
+    <div class="header-modern">
+        <h1>
+            <i class="fas fa-users-gear"></i> Panel de Control
+        </h1>
+        <p>Gestión avanzada de usuarios y administradores del sistema</p>
+    </div>
+
+    <% if (error === 'protegido') { %>
+        <div class="alert-modern">
+            <i class="fas fa-shield-alt"></i>
+            No puedes modificar, degradar ni eliminar tu propia cuenta.
+        </div>
+    <% } %>
+
+    <% if (error === 'correo') { %>
+        <div class="alert-modern">
+            <i class="fas fa-envelope"></i>
+            Ese correo ya está registrado.
+        </div>
+    <% } %>
+
+    <% if (error === 'campos') { %>
+        <div class="alert-modern">
+            <i class="fas fa-exclamation-triangle"></i>
+            Todos los campos obligatorios deben completarse.
+        </div>
+    <% } %>
+
+    <div class="card-modern">
+
+        <div class="card-header-modern">
+            <i class="fas <%= usuarioEditar ? 'fa-pen' : 'fa-user-plus' %>"></i>
+            <%= usuarioEditar ? 'Editar Usuario' : 'Registrar Nuevo Usuario' %>
+        </div>
+
+        <div class="card-body-modern">
+
+            <form method="POST" action="<%= usuarioEditar ? '/gestion/actualizar' : '/gestion/agregar' %>">
+
+                <% if (usuarioEditar) { %>
+                    <input type="hidden" name="id" value="<%= usuarioEditar._id %>">
+                <% } %>
+
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+                        <div class="form-group-modern">
+                            <label>
+                                <i class="fas fa-user"></i> Nombre Completo
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nombre"
+                                class="form-control-modern"
+                                required
+                                value="<%= usuarioEditar ? usuarioEditar.nombre : '' %>"
+                                placeholder="Ingrese el nombre"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group-modern">
+                            <label>
+                                <i class="fas fa-envelope"></i> Correo Electrónico
+                            </label>
+
+                            <input
+                                type="email"
+                                name="correo"
+                                class="form-control-modern"
+                                required
+                                value="<%= usuarioEditar ? usuarioEditar.correo : '' %>"
+                                placeholder="usuario@ejemplo.com"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group-modern">
+                            <label>
+                                <i class="fas fa-lock"></i> Contraseña
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                class="form-control-modern"
+                                <%= usuarioEditar ? '' : 'required' %>
+                                placeholder="<%= usuarioEditar ? 'Dejar vacío para mantener' : 'Ingrese contraseña' %>"
+                            >
+                        </div>
+                    </div>
+
+             <div class="col-md-3">
+    <div class="form-group-modern">
+        <label>
+            <i class="fas fa-tag"></i> Rol de Usuario
+        </label>
+
+        <select
+            name="rol"
+            class="form-select-modern"
+            required
+            <%= usuarioEditar && String(usuarioEditar._id) === String(idActual) ? 'disabled' : '' %>
+        >
+
+            <option value="cliente"
+                <%= usuarioEditar && usuarioEditar.rol === 'cliente' ? 'selected' : '' %>>
+                🧑 Cliente
+            </option>
+
+            <option value="vista_previa"
+                <%= usuarioEditar && usuarioEditar.rol === 'vista_previa' ? 'selected' : '' %>>
+                👁️ Vista previa
+            </option>
+
+            <option value="sin_verificar"
+                <%= usuarioEditar && usuarioEditar.rol === 'sin_verificar' ? 'selected' : '' %>>
+                🚫 Sin verificar
+            </option>
+
+            <option value="admin"
+                <%= usuarioEditar && usuarioEditar.rol === 'admin' ? 'selected' : '' %>>
+                👑 Administrador
+            </option>
+
+        </select>
+
+        <% if (usuarioEditar && String(usuarioEditar._id) === String(idActual)) { %>
+            <input type="hidden" name="rol" value="admin">
+
+            <small class="text-info" style="display:block; margin-top:5px;">
+                <i class="fas fa-lock"></i>
+                No puedes cambiar el rol de tu propia cuenta.
+            </small>
+        <% } %>
+    </div>
+</div>
+
+</div>
+
+                <div class="mt-4">
+
+                    <% if (usuarioEditar) { %>
+
+                        <button type="submit" class="btn-modern btn-warning-modern">
+                            <i class="fas fa-save"></i> Actualizar Usuario
+                        </button>
+
+                        <a href="/gestion" class="btn-modern btn-secondary-modern">
+                            <i class="fas fa-times"></i> Cancelar Edición
+                        </a>
+
+                    <% } else { %>
+
+                        <button type="submit" class="btn-modern btn-success-modern">
+                            <i class="fas fa-plus-circle"></i> Agregar Usuario
+                        </button>
+
+                    <% } %>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="card-modern">
+
+        <div class="card-header-modern">
+            <i class="fas fa-shield-alt"></i>
+            Administradores del Sistema
+        </div>
+
+        <div class="card-body-modern">
+
+            <div class="table-wrapper">
+
+                <table class="table-modern">
+
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID</th>
+                            <th><i class="fas fa-user"></i> Nombre</th>
+                            <th><i class="fas fa-envelope"></i> Correo</th>
+                            <th><i class="fas fa-tag"></i> Rol</th>
+                            <th><i class="fas fa-calendar"></i> Registro</th>
+                            <th><i class="fas fa-cogs"></i> Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <% if (administradores && administradores.length > 0) { %>
+
+                            <% administradores.forEach(admin => { %>
+
+                                <tr>
+                                    <td>
+                                        <strong>#<%= admin._id %></strong>
+                                    </td>
+
+                                    <td>
+                                        <%= admin.nombre %>
+                                    </td>
+
+                                    <td>
+                                        <%= admin.correo %>
+                                    </td>
+
+                                    <td>
+                                        <span class="badge-modern">
+                                            <i class="fas fa-crown"></i>
+                                            <%= admin.rol %>
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <%= admin.fecha_registro ? admin.fecha_registro.toLocaleString('es-MX') : 'Sin fecha' %>
+                                    </td>
+
+                                    <td>
+
+                                        <a href="/gestion?editar=<%= admin._id %>" class="btn-modern btn-info-modern">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+
+                                        <% if (String(admin._id) === String(idActual)) { %>
+
+                                            <span class="badge-protected">
+                                                <i class="fas fa-lock"></i> Cuenta actual protegida
+                                            </span>
+
+                                        <% } else { %>
+
+                                            <form method="POST" action="/gestion/quitar-admin/<%= admin._id %>" class="form-inline form-quitar-admin">
+                                                <button type="submit" class="btn-modern btn-warning-modern">
+                                                    <i class="fas fa-user-minus"></i> Quitar Admin
+                                                </button>
+                                            </form>
+
+                                            <form method="POST" action="/gestion/eliminar/<%= admin._id %>" class="form-inline form-eliminar">
+                                                <button type="submit" class="btn-modern btn-danger-modern">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </button>
+                                            </form>
+
+                                        <% } %>
+
+                                    </td>
+                                </tr>
+
+                            <% }) %>
+
+                        <% } else { %>
+
+                            <tr>
+                                <td colspan="6">No hay administradores registrados.</td>
+                            </tr>
+
+                        <% } %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-modern">
+
+        <div class="card-header-modern">
+            <i class="fas fa-users"></i>
+            Usuarios Estándar
+        </div>
+
+        <div class="card-body-modern">
+
+            <div class="table-wrapper">
+
+                <table class="table-modern">
+
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID</th>
+                            <th><i class="fas fa-user"></i> Nombre</th>
+                            <th><i class="fas fa-envelope"></i> Correo</th>
+                            <th><i class="fas fa-tag"></i> Rol</th>
+                            <th><i class="fas fa-calendar"></i> Registro</th>
+                            <th><i class="fas fa-cogs"></i> Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <% if (usuarios && usuarios.length > 0) { %>
+
+                            <% usuarios.forEach(usuarioItem => { %>
+
+                                <tr>
+                                    <td>
+                                        <strong>#<%= usuarioItem._id %></strong>
+                                    </td>
+
+                                    <td>
+                                        <%= usuarioItem.nombre %>
+                                    </td>
+
+                                    <td>
+                                        <%= usuarioItem.correo %>
+                                    </td>
+
+                                    <td>
+                                        <% if (usuarioItem.rol === 'cliente') { %>
+                                            <span class="badge-modern">
+                                                <i class="fas fa-user"></i> Cliente
+                                            </span>
+                                        <% } else { %>
+                                            <span class="badge-modern">
+                                                <i class="fas fa-eye"></i> Vista Previa
+                                            </span>
+                                        <% } %>
+                                    </td>
+
+                                    <td>
+                                        <%= usuarioItem.fecha_registro ? usuarioItem.fecha_registro.toLocaleString('es-MX') : 'Sin fecha' %>
+                                    </td>
+
+                                    <td>
+
+                                        <a href="/gestion?editar=<%= usuarioItem._id %>" class="btn-modern btn-info-modern">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+
+                                        <form method="POST" action="/gestion/hacer-admin/<%= usuarioItem._id %>" class="form-inline form-hacer-admin">
+                                            <button type="submit" class="btn-modern btn-primary-modern">
+                                                <i class="fas fa-crown"></i> Hacer Admin
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="/gestion/eliminar/<%= usuarioItem._id %>" class="form-inline form-eliminar">
+                                            <button type="submit" class="btn-modern btn-danger-modern">
+                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                            </button>
+                                        </form>
+
+                                    </td>
+                                </tr>
+
+                            <% }) %>
+
+                        <% } else { %>
+
+                            <tr>
+                                <td colspan="6">No hay usuarios registrados.</td>
+                            </tr>
+
+                        <% } %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="text-align: center;">
+        <a href="/dashboard" class="btn-modern btn-secondary-modern btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Volver al Dashboard
+        </a>
+    </div>
+
+</div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/gestion.js"></script>
+
+</body>
+</html>

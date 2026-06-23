@@ -1,0 +1,176 @@
+<header class="bob-navbar">
+
+    <div class="bob-container">
+
+        <div class="bob-logo">
+            <h1>
+                <i class="fas fa-drone"></i>
+                SIMA
+            </h1>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" type="button">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <nav class="bob-navbar-menu" id="mainMenu">
+
+            <ul>
+
+                <li>
+                    <a href="/" class="menu-btn">
+                        <i class="fas fa-home"></i>
+                        Inicio
+                    </a>
+                </li>
+
+                <% if (logueado && (rol === 'cliente' || rol === 'admin')) { %>
+
+                    <li>
+                        <a href="/dashboard" class="menu-btn">
+                            <i class="fas fa-chart-bar"></i>
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/vuelos/vista" class="menu-btn">
+                            <i class="fas fa-plane"></i>
+                            Registro de Vuelos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/mapa-gps" class="menu-btn">
+                            <i class="fas fa-map-marked-alt"></i>
+                            Mapa GPS
+                        </a>
+                    </li>
+
+                <% } %>
+
+                <% if (logueado) { %>
+
+                    <li>
+                        <a href="/comentarios-vista" class="menu-btn">
+                            <i class="fas fa-comments"></i>
+                            Comentarios
+                        </a>
+                    </li>
+
+                    <% if (rol === 'admin') { %>
+
+                        <li>
+                            <a href="/gestion" class="menu-btn admin-btn">
+                                <i class="fas fa-users-cog"></i>
+                                Gestión
+                            </a>
+                        </li>
+
+                    <% } %>
+
+                    <li>
+                        <span class="user-welcome">
+
+                            <i class="fas fa-user"></i>
+
+                            <% if (usuario && usuario.nombre) { %>
+
+                                Hola, <%= usuario.nombre %>
+
+                            <% } else { %>
+
+                                Hola
+
+                            <% } %>
+
+                            <% if (rol) { %>
+
+                                <span class="rol-badge">
+                                    <%= rol %>
+                                </span>
+
+                            <% } %>
+
+                        </span>
+                    </li>
+
+                    <li>
+                        <a href="/logout" class="logout-btn">
+
+                            <i class="fas fa-sign-out-alt"></i>
+
+                            Salir
+
+                        </a>
+                    </li>
+
+                <% } else { %>
+
+                    <li>
+                        <a href="/login" class="menu-btn">
+
+                            <i class="fas fa-sign-in-alt"></i>
+
+                            Ingresar
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <a
+                            href="/registro"
+                            class="menu-btn"
+                            style="background-color:var(--accent); color:white;"
+                        >
+
+                            <i class="fas fa-user-plus"></i>
+
+                            Registro
+
+                        </a>
+                    </li>
+
+                <% } %>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<script>
+
+const menuToggle = document.getElementById('menuToggle');
+
+const mainMenu = document.getElementById('mainMenu');
+
+if (menuToggle && mainMenu) {
+
+    menuToggle.addEventListener('click', function () {
+
+        mainMenu.classList.toggle('active');
+
+        const icon = menuToggle.querySelector('i');
+
+        if (mainMenu.classList.contains('active')) {
+
+            icon.classList.remove('fa-bars');
+
+            icon.classList.add('fa-times');
+
+        } else {
+
+            icon.classList.remove('fa-times');
+
+            icon.classList.add('fa-bars');
+
+        }
+
+    });
+
+}
+
+</script>

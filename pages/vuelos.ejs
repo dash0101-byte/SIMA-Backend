@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Registro de Vuelos - SIMA</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/menu.css">
+
+    <link rel="stylesheet" href="/css/vuelos.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<%- include('../partials/menu') %>
+
+<div class="contenedor-vuelos">
+
+    <div class="panel-vuelos">
+
+        <h2 class="titulo-vuelos">
+
+            <i class="fas fa-plane-departure"></i>
+
+            Registro de Vuelos
+
+        </h2>
+
+        <p class="subtitulo-vuelos">
+
+            Consulta, busca e imprime los vuelos registrados en el sistema SIMA.
+
+        </p>
+
+        <div class="barra-acciones">
+
+            <div class="buscador">
+
+                <i class="fas fa-search"></i>
+
+                <input
+                    type="text"
+                    id="buscarVuelo"
+                    placeholder="Buscar por ID, usuario, fecha o ubicación..."
+                >
+
+            </div>
+
+            <button
+                onclick="window.print()"
+                class="btn-pdf"
+            >
+
+                <i class="fas fa-file-pdf"></i>
+
+                Descargar PDF
+
+            </button>
+
+        </div>
+
+        <div class="tabla-contenedor">
+
+            <table
+                class="table table-bordered table-striped text-center"
+                id="tablaVuelos"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Usuario</th>
+
+                        <th>Fecha Inicio</th>
+
+                        <th>Fecha Fin</th>
+
+                        <th>Ubicación Inicio</th>
+
+                        <th>Ubicación Fin</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                <% if (vuelos && vuelos.length > 0) { %>
+
+                    <% vuelos.forEach(vuelo => { %>
+
+                        <tr class="fila-vuelo">
+
+                            <td>
+
+                                <%= vuelo._id %>
+
+                            </td>
+
+                            <td>
+
+                                <%= vuelo.usuario_id
+                                    ? vuelo.usuario_id.nombre
+                                    : 'Sin usuario'
+                                %>
+
+                            </td>
+
+                            <td>
+
+                                <%= vuelo.fecha_inicio
+                                    ? vuelo.fecha_inicio.toLocaleString('es-MX')
+                                    : 'Sin fecha'
+                                %>
+
+                            </td>
+
+                            <td>
+
+                                <%= vuelo.fecha_fin
+                                    ? vuelo.fecha_fin.toLocaleString('es-MX')
+                                    : 'Sin fecha'
+                                %>
+
+                            </td>
+
+                            <td>
+
+                                <%= vuelo.ubicacion_inicio || 'Sin ubicación' %>
+
+                            </td>
+
+                            <td>
+
+                                <%= vuelo.ubicacion_fin || 'Sin ubicación' %>
+
+                            </td>
+
+                        </tr>
+
+                    <% }) %>
+
+                <% } else { %>
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="mensaje-vacio"
+                        >
+
+                            No hay vuelos registrados todavía.
+
+                        </td>
+
+                    </tr>
+
+                <% } %>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <p
+            class="contador"
+            id="contadorVuelos"
+        ></p>
+
+    </div>
+
+</div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<script src="/js/vuelos.js"></script>
+
+</body>
+
+</html>

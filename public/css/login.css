@@ -1,0 +1,713 @@
+
+    :root {
+        --primary: #3b82f6;
+        --primary-dark: #2563eb;
+        --primary-light: #1e3a8a;
+        --secondary: #1e293b;
+        --secondary-dark: #0f172a;
+        --accent: #10b981;
+        --accent-dark: #059669;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --light: #f1f5f9;
+        --dark: #0f172a;
+        
+        /* Dark theme colors */
+        --bg-primary: #0a0e17;
+        --bg-secondary: #111827;
+        --bg-tertiary: #1a2332;
+        --bg-card: rgba(17, 24, 39, 0.95);
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --border: #1e293b;
+        --border-light: #334155;
+        
+        /* Shadows */
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.5);
+        --shadow-xl: 0 25px 45px rgba(0, 0, 0, 0.6);
+        --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+        
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        --radius: 12px;
+        --radius-lg: 20px;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #0a0e17 0%, #0f172a 50%, #1a1f2e 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Efecto de grid de fondo */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    /* Partículas decorativas */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 20% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* Header estilo SIMA - Dark Glassmorphism */
+    .bob-navbar {
+        background: rgba(17, 24, 39, 0.95);
+        backdrop-filter: blur(20px);
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .bob-container {
+        padding: 15px 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .bob-logo h1 {
+        margin: 0;
+        font-size: 2.2rem;
+        background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .bob-logo h1 i {
+        background: none;
+        -webkit-text-fill-color: var(--accent);
+        font-size: 2.5rem;
+        filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
+    }
+    
+    .bob-navbar-menu ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .menu-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(59, 130, 246, 0.1);
+        backdrop-filter: blur(10px);
+        color: var(--light);
+        padding: 10px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition: var(--transition);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .menu-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(59, 130, 246, 0.4);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    .menu-btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .menu-btn:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        color: white;
+    }
+    
+    /* Contenido principal */
+    .main-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Login Container - Dark Glassmorphism Premium */
+    .login-container {
+        background: rgba(17, 24, 39, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        width: 100%;
+        max-width: 480px;
+        position: relative;
+        transition: var(--transition-bounce);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .login-container:hover {
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+    }
+    
+    /* Borde animado neon */
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, var(--accent), var(--primary), var(--accent), var(--primary));
+        border-radius: calc(var(--radius-lg) + 2px);
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.5s;
+    }
+    
+    .login-container:hover::before {
+        opacity: 1;
+        animation: borderRotate 3s linear infinite;
+    }
+    
+    @keyframes borderRotate {
+        0% { filter: hue-rotate(0deg); }
+        100% { filter: hue-rotate(360deg); }
+    }
+    
+    .login-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        padding: 45px 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .login-header::before {
+        content: '★';
+        position: absolute;
+        font-size: 150px;
+        opacity: 0.03;
+        bottom: -50px;
+        right: -30px;
+        transform: rotate(15deg);
+        pointer-events: none;
+    }
+    
+    .login-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
+    }
+    
+    .login-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        color: var(--accent);
+        animation: pulse 2s infinite;
+        filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); text-shadow: 0 0 0px rgba(16, 185, 129, 0); }
+        50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(16, 185, 129, 0.8); }
+    }
+    
+    .login-header h2 {
+        font-size: 2.2rem;
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #fff, #94a3b8);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .login-body {
+        padding: 45px 40px;
+    }
+    
+    /* Alertas dark */
+    .alert {
+        border-radius: 12px;
+        border: none;
+        padding: 16px 20px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+        animation: slideInLeft 0.4s ease-out;
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 4px solid var(--danger);
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .alert-danger {
+        color: #fca5a5;
+        background: rgba(239, 68, 68, 0.08);
+    }
+    
+    /* Formulario dark */
+    .form-group {
+        margin-bottom: 28px;
+        position: relative;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: var(--transition);
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+    }
+    
+    .form-control:hover {
+        border-color: var(--primary);
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        transform: translateY(-2px);
+        background: var(--bg-tertiary);
+    }
+    
+    .form-control::placeholder {
+        color: var(--text-muted);
+    }
+    
+    .form-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        transition: var(--transition);
+        pointer-events: none;
+    }
+    
+    .form-control:focus + .form-icon {
+        color: var(--primary);
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    /* Botón Login neon */
+    .btn-login {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 14px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition-bounce);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        letter-spacing: 0.5px;
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.6s;
+    }
+    
+    .btn-login:hover::before {
+        left: 100%;
+    }
+    
+    .btn-login:hover {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #1e3a8a 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+    }
+    
+    .btn-login:active {
+        transform: translateY(1px);
+    }
+    
+    .login-links {
+        text-align: center;
+        margin-top: 35px;
+        padding-top: 30px;
+        border-top: 2px solid var(--border);
+    }
+    
+    .login-links p {
+        color: var(--text-secondary);
+        margin: 0 0 15px 0;
+        font-size: 0.9rem;
+    }
+    
+    .login-links a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        border-radius: 50px;
+        background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .login-links a:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateX(5px);
+        text-decoration: none;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    
+    /* Botón flotante neon */
+    .floating-home-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(135deg, var(--accent), var(--primary));
+        color: white;
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        transition: var(--transition-bounce);
+        z-index: 1000;
+        animation: float 3s ease-in-out infinite;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+    }
+    
+    .floating-home-btn:hover {
+        transform: translateY(-8px) scale(1.1);
+        box-shadow: 0 0 35px rgba(59, 130, 246, 0.8);
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+    }
+    
+    .floating-home-btn i {
+        font-size: 1.8rem;
+        transition: transform 0.3s;
+    }
+    
+    .floating-home-btn:hover i {
+        transform: rotate(360deg);
+    }
+    
+    /* Tooltip dark */
+    .floating-home-btn::after {
+        content: "Volver al Inicio";
+        position: absolute;
+        right: 80px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(17, 24, 39, 0.95);
+        backdrop-filter: blur(10px);
+        color: var(--text-primary);
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: var(--transition);
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .floating-home-btn:hover::after {
+        opacity: 1;
+        right: 85px;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-12px); }
+    }
+    
+    /* Footer dark */
+    footer {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: var(--text-secondary);
+        text-align: center;
+        padding: 30px 20px;
+        position: relative;
+        z-index: 1;
+        border-top: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    footer p {
+        margin: 0;
+        opacity: 0.85;
+        font-size: 0.9rem;
+        transition: opacity 0.3s;
+    }
+    
+    footer p:hover {
+        opacity: 1;
+        color: var(--primary);
+    }
+    
+    /* Scrollbar dark */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, var(--primary-dark), var(--accent-dark));
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .bob-container {
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+        }
+        
+        .bob-navbar-menu ul {
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .main-content {
+            padding: 30px 15px;
+        }
+        
+        .login-body {
+            padding: 35px 25px;
+        }
+        
+        .login-header {
+            padding: 35px 25px;
+        }
+        
+        .floating-home-btn {
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+        }
+        
+        .floating-home-btn i {
+            font-size: 1.5rem;
+        }
+        
+        .floating-home-btn::after {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .bob-logo h1 {
+            font-size: 1.8rem;
+        }
+        
+        .bob-logo h1 i {
+            font-size: 2rem;
+        }
+        
+        .menu-btn {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+        
+        .login-header h2 {
+            font-size: 1.8rem;
+        }
+        
+        .login-icon {
+            font-size: 3rem;
+        }
+        
+        .form-control {
+            padding: 14px 16px 14px 45px;
+            font-size: 0.95rem;
+        }
+        
+        .btn-login {
+            padding: 14px;
+            font-size: 1rem;
+        }
+        
+        .login-links a {
+            padding: 6px 12px;
+        }
+    }
+    
+    /* Efecto de glow para inputs */
+    .form-control:focus {
+        animation: glow 0.3s ease;
+    }
+    
+    @keyframes glow {
+        from {
+            box-shadow: 0 0 0px rgba(59, 130, 246, 0);
+        }
+        to {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+    }
+    
+    /* Accesibilidad */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+    
+    /* Efecto de carga para inputs */
+    .form-control:focus ~ .form-icon i {
+        animation: shake 0.3s ease;
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-2px); }
+        75% { transform: translateX(2px); }
+    }
+    
+    /* Text selection dark */
+    ::selection {
+        background: var(--primary);
+        color: white;
+    }
+    
+    ::-moz-selection {
+        background: var(--primary);
+        color: white;
+    }

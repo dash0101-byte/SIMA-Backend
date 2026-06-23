@@ -1,0 +1,261 @@
+:root {
+
+    --primary: #00d4ff;
+    --primary-dark: #0099cc;
+
+    --accent: #22c55e;
+    --accent-dark: #16a34a;
+
+    --secondary: #1e293b;
+
+    --light: #f8fafc;
+
+    --dark: #0f172a;
+
+    --darker: #020617;
+
+    --shadow: 0 10px 30px rgba(0,0,0,.30);
+
+    --shadow-hover: 0 15px 40px rgba(0,212,255,.15);
+
+    --shadow-glow: 0 0 20px rgba(0,212,255,.20);
+
+    --transition: all .3s cubic-bezier(.4,0,.2,1);
+
+    --radius: 20px;
+
+    --radius-sm: 12px;
+
+}
+body{
+
+    font-family:'Poppins','Inter',system-ui,sans-serif;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0a0e17 0%,
+            #0f172a 50%,
+            #1a1f2e 100%
+        );
+
+    background-attachment:fixed;
+
+    min-height:100vh;
+
+    position:relative;
+
+    color:white;
+
+}
+
+body::before{
+
+    content:'';
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    background-image:
+
+        radial-gradient(
+
+            circle at 20% 40%,
+
+            rgba(0,212,255,.06) 0%,
+
+            transparent 40%
+
+        ),
+
+        radial-gradient(
+
+            circle at 80% 60%,
+
+            rgba(34,197,94,.04) 0%,
+
+            transparent 40%
+
+        ),
+
+        repeating-linear-gradient(
+
+            45deg,
+
+            rgba(255,255,255,.02) 0px,
+
+            rgba(255,255,255,.02) 2px,
+
+            transparent 2px,
+
+            transparent 8px
+
+        );
+
+    pointer-events:none;
+
+    z-index:0;
+
+}
+
+        .contenedor-vuelos {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 25px;
+        }
+
+        .panel-vuelos {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .titulo-vuelos {
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .subtitulo-vuelos {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .barra-acciones {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .buscador {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .buscador i {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .buscador input {
+            width: 100%;
+            padding: 13px 18px 13px 45px;
+            border-radius: 50px;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            background: #020617;
+            color: white;
+            outline: none;
+        }
+
+        .buscador input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .btn-pdf:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35);
+        }
+
+        .tabla-contenedor {
+            border-radius: 18px;
+            overflow: hidden;
+            background: white;
+        }
+
+        table {
+            margin: 0 !important;
+        }
+
+        thead th {
+            background: #020617 !important;
+            color: white !important;
+            padding: 15px !important;
+        }
+
+        tbody td {
+            padding: 14px !important;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background-color: #e0f2fe !important;
+        }
+
+        .mensaje-vacio {
+            color: #64748b;
+            font-weight: 600;
+            padding: 20px;
+        }
+
+        .contador {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-top: 15px;
+        }
+
+        @media print {
+            .bob-navbar,
+            .barra-acciones,
+            .contador {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .contenedor-vuelos {
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .panel-vuelos {
+                box-shadow: none;
+                border: none;
+                background: white;
+                padding: 0;
+            }
+
+            .titulo-vuelos,
+            .subtitulo-vuelos {
+                color: black !important;
+                text-align: center;
+            }
+
+            tr.oculto {
+                display: none !important;
+            }
+
+            table {
+                font-size: 12px;
+            }
+        }

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SIMA - Sistema Integrado de Monitoreo Ambiental</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/index.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<%- include('../partials/menu') %>
+
+<section class="hero-section">
+    <div class="hero-content">
+
+        <h2>SIMA</h2>
+
+        <p class="hero-subtitle">
+            Plataforma inteligente de monitoreo ambiental mediante drones, tecnología GPS y gestión digital de vuelos.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#features" class="cta-button">Explorar sistema</a>
+
+            <button class="secondary-button" onclick="toggleInfoPanel()">
+                Más información
+            </button>
+        </div>
+
+        <div class="hero-image">
+            <img src="/img/dron_ind.png" alt="Dron SIMA">
+        </div>
+
+    </div>
+</section>
+
+<section class="drone-replacement-section">
+    <div class="drone-replacement-container">
+        
+        <div class="drone-replacement-image">
+            <img src="/img/dronfinn.jpeg" 
+                 alt="Dron SIMA en misión de monitoreo ambiental"
+                 onerror="this.src='/img/dron_ind.png'">
+        </div>
+        
+        <div class="drone-replacement-text">
+            <span class="highlight">
+                <i class="fas fa-microchip"></i> Sensores Inteligentes
+            </span>
+
+            <h3>
+                <i class="fas fa-satellite-dish"></i>
+                ¿Qué detecta nuestro dron?
+            </h3>
+
+            <p>
+                El dron SIMA está equipado con sensores multiespectrales que permiten 
+                <strong>capturar datos precisos del entorno en tiempo real</strong>. Cada misión de vuelo 
+                genera información valiosa para la toma de decisiones ambientales.
+            </p>
+            
+            <div style="margin: 25px 0;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    
+                    <div style="display: flex; align-items: center; gap: 12px; background: rgba(59,130,246,0.1); padding: 12px; border-radius: 12px;">
+                        <i class="fas fa-smog" style="font-size: 1.8rem; color: #f59e0b;"></i>
+                        <div>
+                            <strong style="color: var(--text-primary);">Calidad del Aire</strong>
+                            <p style="font-size: 0.75rem; margin: 0; color: var(--text-muted);">Partículas, CO2, humo, gases</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; background: rgba(59,130,246,0.1); padding: 12px; border-radius: 12px;">
+                        <i class="fas fa-temperature-low" style="font-size: 1.8rem; color: #3b82f6;"></i>
+                        <div>
+                            <strong style="color: var(--text-primary);">Temperatura</strong>
+                            <p style="font-size: 0.75rem; margin: 0; color: var(--text-muted);">Calor superficial y ambiental</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; background: rgba(59,130,246,0.1); padding: 12px; border-radius: 12px;">
+                        <i class="fas fa-tint" style="font-size: 1.8rem; color: #06b6d4;"></i>
+                        <div>
+                            <strong style="color: var(--text-primary);">Humedad</strong>
+                            <p style="font-size: 0.75rem; margin: 0; color: var(--text-muted);">Humedad relativa del ambiente</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; background: rgba(59,130,246,0.1); padding: 12px; border-radius: 12px;">
+                        <i class="fas fa-leaf" style="font-size: 1.8rem; color: #10b981;"></i>
+                        <div>
+                            <strong style="color: var(--text-primary);">Índice NDVI</strong>
+                            <p style="font-size: 0.75rem; margin: 0; color: var(--text-muted);">Salud de vegetación</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item before">
+                    <i class="fas fa-microscope"></i>
+                    <h4>Detección ambiental</h4>
+                    <p>🔍 Identifica focos de calor<br>🌫️ Mide concentración de partículas<br>🌡️ Registra temperatura superficial</p>
+                </div>
+
+                <div class="comparison-item after">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Beneficio del dato</h4>
+                    <p>📊 Alertas tempranas<br>📈 Tendencia ambiental<br>🗺️ Mapa de calor interactivo</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; display: flex; gap: 12px; flex-wrap: wrap;">
+                <span style="background: rgba(16,185,129,0.15); padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; border: 1px solid rgba(16,185,129,0.3);">
+                    <i class="fas fa-microchip"></i> Sensor multiespectral
+                </span>
+
+                <span style="background: rgba(59,130,246,0.15); padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; border: 1px solid rgba(59,130,246,0.3);">
+                    <i class="fas fa-satellite"></i> Telemetría GPS
+                </span>
+
+                <span style="background: rgba(245,158,11,0.15); padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; border: 1px solid rgba(245,158,11,0.3);">
+                    <i class="fas fa-cloud-sun"></i> Datos meteorológicos
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section class="quick-info">
+    <div class="quick-grid">
+
+        <div class="quick-box">
+            <i class="fas fa-drone"></i>
+            <h3>Drones inteligentes</h3>
+            <p>Supervisión ambiental mediante dispositivos aéreos y sensores aplicados.</p>
+        </div>
+
+        <div class="quick-box">
+            <i class="fas fa-map-location-dot"></i>
+            <h3>GPS en tiempo real</h3>
+            <p>Ubicación y seguimiento del dron dentro de zonas específicas de monitoreo.</p>
+        </div>
+
+        <div class="quick-box">
+            <i class="fas fa-leaf"></i>
+            <h3>Impacto ambiental</h3>
+            <p>Apoyo al análisis de zonas urbanas, áreas verdes y condiciones ambientales.</p>
+        </div>
+
+    </div>
+</section>
+
+<section class="features" id="features">
+
+    <h2>Funciones de la Plataforma</h2>
+
+    <div class="grid">
+
+        <% if (rol === 'cliente' || rol === 'admin') { %>
+            <div class="card"
+                 onclick="location.href='/mapa-gps'"
+                 data-bs-toggle="tooltip"
+                 title="Visualización GPS del dron">
+
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Monitoreo Ambiental</h3>
+                <p>
+                    Visualización de ubicación, seguimiento del dron y consulta de datos relevantes del entorno.
+                </p>
+                <small style="color: var(--secondary);">Seguimiento organizado</small>
+            </div>
+        <% } %>
+
+        <% if (logueado) { %>
+            <div class="card"
+                 onclick="location.href='/comentarios-vista'"
+                 data-bs-toggle="tooltip"
+                 title="Comentarios y observaciones">
+
+                <i class="fas fa-comments"></i>
+                <h3>Comentarios y Reportes</h3>
+                <p>
+                    Espacio para registrar observaciones, reportes o sugerencias relacionadas con el sistema.
+                </p>
+                <small style="color: var(--secondary);">Comunicación y mejora continua</small>
+            </div>
+        <% } %>
+
+        <% if (rol === 'cliente' || rol === 'admin') { %>
+            <div class="card"
+                 onclick="location.href='/dashboard'"
+                 data-bs-toggle="tooltip"
+                 title="Panel de control">
+
+                <i class="fas fa-chart-bar"></i>
+                <h3>Panel de Control</h3>
+                <p>
+                    Consulta de información operativa, registros, métricas y herramientas internas de seguimiento.
+                </p>
+                <small style="color: var(--secondary);">Datos para decisiones</small>
+            </div>
+        <% } %>
+
+        <% if (rol === 'cliente' || rol === 'admin') { %>
+            <div class="card"
+                 onclick="location.href='/vuelos'"
+                 data-bs-toggle="tooltip"
+                 title="Registro de vuelos">
+
+                <i class="fas fa-plane-departure"></i>
+                <h3>Registro de Vuelos</h3>
+                <p>
+                    Consulta y administración de vuelos registrados en el sistema SIMA.
+                </p>
+                <small style="color: var(--secondary);">Control de misiones</small>
+            </div>
+        <% } %>
+
+        <% if (rol === 'admin') { %>
+            <div class="card"
+                 onclick="location.href='/gestion'"
+                 data-bs-toggle="tooltip"
+                 title="Gestión de usuarios">
+
+                <i class="fas fa-users-gear"></i>
+                <h3>Gestión</h3>
+                <p>
+                    Administración de usuarios, roles y permisos dentro del sistema.
+                </p>
+                <small style="color: var(--secondary);">Solo administrador</small>
+            </div>
+        <% } %>
+
+        <% if (!logueado) { %>
+            <div class="card"
+                 onclick="location.href='/login'"
+                 data-bs-toggle="tooltip"
+                 title="Iniciar sesión">
+
+                <i class="fas fa-right-to-bracket"></i>
+                <h3>Iniciar Sesión</h3>
+                <p>
+                    Accede al sistema para consultar las funciones disponibles según tu nivel de usuario.
+                </p>
+                <small style="color: var(--secondary);">Acceso al sistema</small>
+            </div>
+
+            <div class="card"
+                 onclick="location.href='/registro'"
+                 data-bs-toggle="tooltip"
+                 title="Crear cuenta">
+
+                <i class="fas fa-user-plus"></i>
+                <h3>Registro</h3>
+                <p>
+                    Crea una cuenta para solicitar acceso al sistema SIMA.
+                </p>
+                <small style="color: var(--secondary);">Nuevo usuario</small>
+            </div>
+        <% } %>
+
+    </div>
+</section>
+
+<section class="contenedor" id="modelos">
+
+    <h2 style="text-align: center; margin-bottom: 40px; color: var(--dark);">
+        Soluciones de Monitoreo Ambiental SIMA
+    </h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <img src="/img/dron_basico.png"
+                 alt="Dron para monitoreo urbano"
+                 style="width:100%; border-radius:10px; height: 200px; object-fit: cover; margin-bottom:15px;">
+
+            <h3>Monitoreo Urbano</h3>
+
+            <p style="color: var(--secondary); font-weight: bold; margin: 10px 0;">
+                Supervisión ligera
+            </p>
+
+            <p style="font-size: 0.9rem; color: #666;">
+                Recorridos rápidos en zonas urbanas, campus, parques y espacios de vigilancia ambiental básica.
+            </p>
+
+            <ul style="list-style: none; text-align: left; padding: 15px 0; color: #555;">
+                <li><i class="fas fa-battery-half"></i> Autonomía estimada: 20 minutos</li>
+                <li><i class="fas fa-wifi"></i> Alcance estimado: 1 km</li>
+                <li><i class="fas fa-camera"></i> Cámara HD</li>
+                <li><i class="fas fa-city"></i> Zonas urbanas controladas</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--accent);">
+            <img src="/img/dron_pro.png"
+                 alt="Dron para análisis ambiental"
+                 style="width:100%; border-radius:10px; height: 200px; object-fit: cover; margin-bottom:15px;">
+
+            <h3>Análisis Ambiental</h3>
+
+            <p style="color: var(--secondary); font-weight: bold; margin: 10px 0;">
+                Supervisión avanzada
+            </p>
+
+            <p style="font-size: 0.9rem; color: #666;">
+                Monitoreo de zonas verdes, cultivos, áreas naturales y condiciones ambientales específicas.
+            </p>
+
+            <ul style="list-style: none; text-align: left; padding: 15px 0; color: #555;">
+                <li><i class="fas fa-battery-full"></i> Autonomía estimada: 45 minutos</li>
+                <li><i class="fas fa-wifi"></i> Alcance estimado: 5 km</li>
+                <li><i class="fas fa-camera"></i> Cámara 4K</li>
+                <li><i class="fas fa-leaf"></i> Sensores ambientales</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <img src="/img/dron_ind.png"
+                 alt="Dron para supervisión industrial"
+                 style="width:100%; border-radius:10px; height: 200px; object-fit: cover; margin-bottom:15px;">
+
+            <h3>Supervisión Industrial</h3>
+
+            <p style="color: var(--secondary); font-weight: bold; margin: 10px 0;">
+                Operación de alta resistencia
+            </p>
+
+            <p style="font-size: 0.9rem; color: #666;">
+                Enfocado en infraestructura, zonas de riesgo, áreas extensas y supervisión técnica especializada.
+            </p>
+
+            <ul style="list-style: none; text-align: left; padding: 15px 0; color: #555;">
+                <li><i class="fas fa-battery-full"></i> Autonomía estimada: 60 minutos</li>
+                <li><i class="fas fa-wifi"></i> Alcance estimado: 10 km</li>
+                <li><i class="fas fa-microchip"></i> Sensores intercambiables</li>
+                <li><i class="fas fa-shield-alt"></i> Resistencia a condiciones difíciles</li>
+            </ul>
+        </div>
+
+    </div>
+
+</section>
+
+<button class="floating-info-btn" onclick="toggleInfoPanel()">
+    <i class="fas fa-circle-info"></i>
+</button>
+
+<div class="info-panel" id="infoPanel">
+    <div class="info-panel-header">
+        <h3><i class="fas fa-circle-info"></i> Información del proyecto</h3>
+        <button class="close-panel" onclick="closeInfoPanel()">&times;</button>
+    </div>
+
+    <div class="info-panel-body">
+
+        <h4>Alcance del proyecto</h4>
+        <p>
+            SIMA permite registrar vuelos, visualizar información operativa y apoyar el monitoreo ambiental mediante un prototipo basado en dron y plataforma web.
+        </p>
+
+        <h4>Limitantes</h4>
+        <ul>
+            <li>El prototipo se encuentra en etapa de desarrollo académico.</li>
+            <li>No sustituye una estación meteorológica profesional.</li>
+            <li>Algunas funciones dependen de la conexión local y del prototipo físico.</li>
+        </ul>
+
+        <h4>Tecnología aplicada</h4>
+        <ul>
+            <li>Node.js y Express para la lógica del servidor.</li>
+            <li>MongoDB para almacenamiento de datos.</li>
+            <li>Bootstrap, HTML, CSS, EJS y JavaScript para la interfaz.</li>
+            <li>Dron con integración GPS y posibles sensores ambientales.</li>
+        </ul>
+
+        <h4>Niveles de usuario</h4>
+        <ul>
+            <li><strong>Administrador:</strong> gestiona usuarios, vuelos y paneles internos.</li>
+            <li><strong>Cliente final:</strong> consulta vuelos, mapa GPS y datos del sistema.</li>
+            <li><strong>Vista previa:</strong> visualiza información general sin acceder a datos internos.</li>
+        </ul>
+
+        <h4>Impacto ambiental</h4>
+        <p>
+            El sistema se orienta a apoyar la supervisión ambiental y la toma de decisiones mediante información visual, ubicación GPS y registro digital.
+        </p>
+
+    </div>
+</div>
+
+<footer class="footer-sima">
+    <div class="footer-content">
+
+        <div>
+            <h4>SIMA</h4>
+            <p>Sistema Integrado de Monitoreo Ambiental.</p>
+            <p>Proyecto académico con enfoque tecnológico y ambiental.</p>
+        </div>
+
+        <div>
+            <h4>Tecnologías</h4>
+            <p>Node.js</p>
+            <p>Express</p>
+            <p>MongoDB</p>
+            <p>EJS</p>
+        </div>
+
+        <div>
+            <h4>Funciones</h4>
+            <p>Monitoreo GPS</p>
+            <p>Gestión de vuelos</p>
+            <p>Dashboard</p>
+            <p>Gestión de usuarios</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 SIMA | Proyecto desarrollado por Jocabed Montoya
+    </div>
+</footer>
+
+<div class="scroll-to-top" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/js/index.js"></script>
+
+</body>
+</html>

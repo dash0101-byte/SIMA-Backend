@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comentarios - SIMA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/comentarios.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <%- include('../partials/menu') %>
+
+    <section class="contenedor">
+        <div class="page-title">
+            <h2><i class="fas fa-comments"></i> Comentarios del Dron</h2>
+            <p>Comparte tus experiencias y opiniones sobre el sistema de dron magnético</p>
+        </div>
+        
+        <div class="comentarios-container">
+            <div class="comentarios-list">
+
+                <% if (comentarios.length > 0) { %>
+
+                    <% comentarios.forEach(comentario => { %>
+
+                        <div class="comentario">
+                            <div class="comentario-header">
+                                <div class="comentario-user">
+                                    <div class="user-avatar">
+                                        <%= comentario.nombreUsuario ? comentario.nombreUsuario.charAt(0).toUpperCase() : 'U' %>
+                                    </div>
+
+                                    <div>
+                                        <strong><%= comentario.nombreUsuario || 'Usuario' %></strong>
+
+                                        <span class="role-badge <%= comentario.rolClase %>">
+                                            <%= comentario.rol || 'vista_previa' %>
+                                        </span>
+
+                                        <div style="font-size: 0.85rem; color: #999;">
+                                            <i class="far fa-clock"></i>
+                                            <%= comentario.fechaFormateada %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p><%= comentario.comentario %></p>
+                        </div>
+
+                    <% }) %>
+
+                <% } else { %>
+
+                    <div class="empty-comments">
+                        <i class="far fa-comment-dots"></i>
+                        <h3>No hay comentarios todavía</h3>
+                        <p>Sé el primero en compartir tu experiencia con el dron magnético</p>
+                    </div>
+
+                <% } %>
+
+            </div>
+        </div>
+
+        <% if (logueado) { %>
+
+            <div class="form-container">
+                <h3 class="form-title">
+                    <i class="fas fa-edit"></i> Escribe tu comentario
+                </h3>
+
+                <form action="/comentarios-vista" method="POST">
+                    <textarea 
+                        name="comentario" 
+                        rows="4" 
+                        placeholder="Comparte tus pensamientos, sugerencias o experiencias con el dron magnético..." 
+                        required></textarea>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane"></i> Publicar Comentario
+                    </button>
+                </form>
+            </div>
+
+        <% } else { %>
+
+            <div class="login-msg">
+                <p><i class="fas fa-user-plus"></i> ¿Quieres comentar tú también?</p>
+
+                <div class="login-links">
+                    <a href="/login" class="login-link">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+
+                    <a href="/registro" class="login-link register">
+                        <i class="fas fa-user-plus"></i> Crear Cuenta
+                    </a>
+                </div>
+            </div>
+
+        <% } %>
+
+    </section>
+
+    <footer>
+        <p>© 2026 SIMA - Sistema Integrado de Monitoreo Ambiental</p>
+        <p>Implementación técnica y desarrollo web realizados por Jocabed Montoya.</p>
+    </footer>
+
+</div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
