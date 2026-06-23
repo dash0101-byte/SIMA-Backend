@@ -25,6 +25,18 @@ const sensorSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    co2: {
+        type: Number,
+        required: true
+    },
+    humedad: {
+        type: Number,
+        required: true
+    },
+    presion: {
+        type: Number,
+        required: true
+    },
     fecha: {
         type: Date,
         default: Date.now

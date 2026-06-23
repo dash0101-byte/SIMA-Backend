@@ -11,7 +11,10 @@ exports.obtenerSensores = async (req, res) => {
                 temperatura: 0,
                 estacion: '-',
                 gps: 'Inactivo',
-                altura: 0
+                altura: 0,
+                co2: 0,
+                humedad: 0,
+                presion: 0
             });
         }
 
@@ -19,7 +22,6 @@ exports.obtenerSensores = async (req, res) => {
 
     } catch (error) {
         console.error('Error al obtener el último sensor:', error);
-
         res.status(500).json({
             mensaje: 'Error al obtener el último sensor'
         });
