@@ -1,545 +1,186 @@
 // ======================
 // SCROLL TO TOP
 // ======================
-
 window.addEventListener('scroll', function () {
-
     const scrollBtn = document.querySelector('.scroll-to-top');
-
     if (!scrollBtn) return;
-
     if (window.scrollY > 300) {
-
         scrollBtn.classList.add('show');
-
     } else {
-
         scrollBtn.classList.remove('show');
-
     }
-
 });
 
 function scrollToTop() {
-
-    window.scrollTo({
-
-        top: 0,
-
-        behavior: 'smooth'
-
-    });
-
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ======================
-// VARIABLES
+// VARIABLES DE NODE.JS
 // ======================
+// Ruta relativa hacia tu nuevo backend. Si tu compañera montó las rutas 
+// de otra forma (ej. "/api/sensores"), solo cámbialo aquí.
+const API_URL = "/sensores"; 
 
-const ENV_URL = "http://172.16.117.50/env";
-
-const GPS_URL = "http://172.16.117.50/gps";
-
-const hist = {
-
-    t: [],
-
-    h: [],
-
-    c: [],
-
-    g: []
-
-};
-
+const hist = { t: [], h: [], c: [], g: [] };
 let lastGeoTime = 0;
 
 // ======================
 // FUNCIONES AUXILIARES
 // ======================
-
 function push(arr, val) {
-
     arr.push(val);
-
-    if (arr.length > 15) {
-
-        arr.shift();
-
-    }
-
+    if (arr.length > 15) arr.shift();
 }
 
 function trend(arr) {
-
-    if (arr.length < 2) {
-
-        return {
-
-            icon: "→",
-
-            cls: "trend-flat",
-
-            txt: "Estable"
-
-        };
-
-    }
-
+    if (arr.length < 2) return { icon: "→", cls: "trend-flat", txt: "Estable" };
     const d = arr[arr.length - 1] - arr[arr.length - 2];
-
-    if (d > 0.5) {
-
-        return {
-
-            icon: "↑",
-
-            cls: "trend-up",
-
-            txt: "Subiendo"
-
-        };
-
-    }
-
-    if (d < -0.5) {
-
-        return {
-
-            icon: "↓",
-
-            cls: "trend-down",
-
-            txt: "Bajando"
-
-        };
-
-    }
-
-    return {
-
-        icon: "→",
-
-        cls: "trend-flat",
-
-        txt: "Estable"
-
-    };
-
+    if (d > 0.5) return { icon: "↑", cls: "trend-up", txt: "Subiendo" };
+    if (d < -0.5) return { icon: "↓", cls: "trend-down", txt: "Bajando" };
+    return { icon: "→", cls: "trend-flat", txt: "Estable" };
 }
 
 function setStatus(el, txt, lvl) {
-
+    if(!el) return;
     el.textContent = txt;
-
-    el.className =
-
-        "card-status " +
-
-        (
-
-            lvl === "ok"
-
-                ? "status-ok"
-
-                : lvl === "warn"
-
-                    ? "status-warn"
-
-                    : "status-bad"
-
-        );
-
+    el.className = "card-status " + (lvl === "ok" ? "status-ok" : lvl === "warn" ? "status-warn" : "status-bad");
 }
 
 function calcIAQ(d) {
-
     let score = 100;
-
-    if (d.co2 > 1200) {
-
-        score -= 40;
-
-    } else if (d.co2 > 800) {
-
-        score -= 20;
-
-    }
-
-    if (d.humidity < 30 || d.humidity > 70) {
-
-        score -= 15;
-
-    }
-
-    if (d.gas < 80000) {
-
-        score -= 10;
-
-    }
-
+    // Evaluamos con las variables en español que vienen de Node.js
+    if (d.co2 > 1200) score -= 40;
+    else if (d.co2 > 800) score -= 20;
+    if (d.humedad < 30 || d.humedad > 70) score -= 15; 
     return Math.max(0, score);
-
 }
 
 // ======================
-// SENSORES
+// UBICACIÓN (OpenStreetMap)
 // ======================
+async function getLocationName(lat, lon) {
+    try {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+        const res = await fetch(url, { headers: { "Accept-Language": "es" } });
+        const d = await res.json();
+        const a = d.address || {};
+        return [a.suburb || a.neighbourhood || a.village || "", a.city || a.municipality || "", a.state || ""]
+            .filter(Boolean).join(", ");
+    } catch {
+        return "Ubicación no disponible";
+    }
+}
 
+// ======================
+// MOTOR PRINCIPAL (Dron + Sensores)
+// ======================
 function update() {
-
-    fetch(ENV_URL)
-
+    fetch(API_URL)
         .then(r => r.json())
+        .then(async (d) => {
+            // 1. GRAFICAR SENSORES AMBIENTALES
+            // Usamos d.temperatura, d.humedad, etc., para empatar con MongoDB
+            push(hist.t, d.temperatura || 0);
+            push(hist.h, d.humedad || 0);
+            push(hist.c, d.co2 || 0);
+            push(hist.g, 0); // Omitimos el gas analógico por ahora
 
-        .then(d => {
+            document.getElementById('temperature').textContent = (d.temperatura || 0).toFixed(1);
+            document.getElementById('humidity').textContent = (d.humedad || 0).toFixed(1);
+            document.getElementById('co2').textContent = Math.round(d.co2 || 0);
+            document.getElementById('pressure').textContent = (d.presion || 0).toFixed(1);
+            
+            const gasEl = document.getElementById('gas');
+            if(gasEl) gasEl.textContent = "--";
 
-            push(hist.t, d.temperature);
-
-            push(hist.h, d.humidity);
-
-            push(hist.c, d.co2);
-
-            push(hist.g, d.gas);
-
-            temperature.textContent = d.temperature.toFixed(1);
-
-            humidity.textContent = d.humidity.toFixed(1);
-
-            co2.textContent = Math.round(d.co2);
-
-            pressure.textContent = d.pressure.toFixed(1);
-
-            gas.textContent = Math.round(d.gas);
-
+            // Calculamos tendencias
             const tt = trend(hist.t);
-
             const th = trend(hist.h);
-
             const tc = trend(hist.c);
 
-            const tg = trend(hist.g);
+            document.getElementById('trendTemp').textContent = `${tt.icon} ${tt.txt}`;
+            document.getElementById('trendTemp').className = tt.cls;
+            document.getElementById('trendHum').textContent = `${th.icon} ${th.txt}`;
+            document.getElementById('trendHum').className = th.cls;
+            document.getElementById('trendCO2').textContent = `${tc.icon} ${tc.txt}`;
+            document.getElementById('trendCO2').className = tc.cls;
 
-            trendTemp.textContent = `${tt.icon} ${tt.txt}`;
+            // Alertas de salud
+            setStatus(document.getElementById('tempStatus'), 
+                d.temperatura < 18 ? "Frío" : d.temperatura > 28 ? "Caliente" : "Confort",
+                d.temperatura < 18 || d.temperatura > 28 ? "warn" : "ok");
+                
+            setStatus(document.getElementById('humStatus'),
+                d.humedad < 30 ? "Seco" : d.humedad > 70 ? "Húmedo" : "Ideal",
+                d.humedad < 30 || d.humedad > 70 ? "warn" : "ok");
+                
+            setStatus(document.getElementById('co2Status'),
+                d.co2 < 600 ? "Excelente" : d.co2 < 1000 ? "Aceptable" : "Alto",
+                d.co2 < 600 ? "ok" : d.co2 < 1000 ? "warn" : "bad");
 
-            trendTemp.className = tt.cls;
-
-            trendHum.textContent = `${th.icon} ${th.txt}`;
-
-            trendHum.className = th.cls;
-
-            trendCO2.textContent = `${tc.icon} ${tc.txt}`;
-
-            trendCO2.className = tc.cls;
-
-            trendGas.textContent = `${tg.icon} ${tg.txt}`;
-
-            trendGas.className = tg.cls;
-
-            setStatus(
-
-                tempStatus,
-
-                d.temperature < 18
-
-                    ? "Frío"
-
-                    : d.temperature > 28
-
-                        ? "Caliente"
-
-                        : "Confort",
-
-                d.temperature < 18 || d.temperature > 28
-
-                    ? "warn"
-
-                    : "ok"
-
-            );
-
-            setStatus(
-
-                humStatus,
-
-                d.humidity < 30
-
-                    ? "Seco"
-
-                    : d.humidity > 70
-
-                        ? "Húmedo"
-
-                        : "Ideal",
-
-                d.humidity < 30 || d.humidity > 70
-
-                    ? "warn"
-
-                    : "ok"
-
-            );
-
-            setStatus(
-
-                co2Status,
-
-                d.co2 < 600
-
-                    ? "Excelente"
-
-                    : d.co2 < 1000
-
-                        ? "Aceptable"
-
-                        : "Alto",
-
-                d.co2 < 600
-
-                    ? "ok"
-
-                    : d.co2 < 1000
-
-                        ? "warn"
-
-                        : "bad"
-
-            );
-
-            setStatus(
-
-                gasStatus,
-
-                d.gas > 100000
-
-                    ? "Bueno"
-
-                    : "Cuidado",
-
-                d.gas > 100000
-
-                    ? "ok"
-
-                    : "warn"
-
-            );
-
+            // Insignia de Calidad del Aire (IAQ)
             const iaq = calcIAQ(d);
-
-            if (document.getElementById("globalBadge")) {
-
-                globalBadge.className =
-
-                    "badge-global " +
-
-                    (
-
-                        iaq > 80
-
-                            ? "bg-ok"
-
-                            : iaq > 60
-
-                                ? "bg-warn"
-
-                                : "bg-bad"
-
-                    );
-
-                globalBadge.textContent =
-
-                    iaq > 80
-
-                        ? "Ambiente saludable"
-
-                        : iaq > 60
-
-                            ? "Ventilación recomendada"
-
-                            : "Mala calidad del aire";
-
+            const globalBadge = document.getElementById("globalBadge");
+            if (globalBadge) {
+                globalBadge.className = "badge-global " + (iaq > 80 ? "bg-ok" : iaq > 60 ? "bg-warn" : "bg-bad");
+                globalBadge.textContent = iaq > 80 ? "Ambiente saludable" : iaq > 60 ? "Ventilación recomendada" : "Mala calidad del aire";
             }
 
-            if (d.co2 > 1200) {
-
-                alerta.style.display = "block";
-
-                alerta.textContent =
-
-                    "⚠ CO₂ alto: ventila inmediatamente";
-
-            }
-
-            else {
-
-                alerta.style.display = "none";
-
-            }
-
-        })
-
-        .catch(error => {
-
-            console.error(error);
-
-        });
-
-}
-
-// ======================
-// UBICACIÓN
-// ======================
-
-async function getLocationName(lat, lon) {
-
-    try {
-
-        const url =
-
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-
-        const res = await fetch(
-
-            url,
-
-            {
-
-                headers: {
-
-                    "Accept-Language": "es"
-
+            const alerta = document.getElementById('alerta');
+            if (alerta) {
+                if (d.co2 > 1200) {
+                    alerta.style.display = "block";
+                    alerta.textContent = "⚠ CO₂ alto: ventila inmediatamente";
+                } else {
+                    alerta.style.display = "none";
                 }
-
             }
 
-        );
+            // 2. GRAFICAR GPS Y ESTADO DEL DRON
+            const droneState = document.getElementById('droneState');
+            const droneStatus = document.getElementById('droneStatus');
+            const droneCoords = document.getElementById('droneCoords');
+            const droneLocation = document.getElementById('droneLocation');
 
-        const d = await res.json();
+            // Si el backend nos da coordenadas válidas, las separamos
+            if (d.gps && d.gps !== 'Inactivo' && d.gps !== '-') {
+                const parts = d.gps.split(',');
+                if(parts.length === 2) {
+                    const lat = parseFloat(parts[0]);
+                    const lon = parseFloat(parts[1]);
 
-        const a = d.address || {};
+                    if(droneState) droneState.textContent = d.estado || "En operación";
+                    if(droneStatus) {
+                        droneStatus.textContent = "Activo";
+                        droneStatus.className = "card-status status-ok";
+                    }
+                    if(droneCoords) droneCoords.textContent = `Lat: ${lat.toFixed(5)} | Lon: ${lon.toFixed(5)}`;
 
-        return [
-
-            a.suburb ||
-
-            a.neighbourhood ||
-
-            a.village ||
-
-            "",
-
-            a.city ||
-
-            a.municipality ||
-
-            "",
-
-            a.state ||
-
-            ""
-
-        ]
-
-            .filter(Boolean)
-
-            .join(", ");
-
-    }
-
-    catch {
-
-        return "Ubicación no disponible";
-
-    }
-
+                    // Consultar nombre de la calle cada 15 segundos para no saturar la API externa
+                    if (Date.now() - lastGeoTime > 15000 && droneLocation) {
+                        lastGeoTime = Date.now();
+                        const loc = await getLocationName(lat, lon);
+                        droneLocation.textContent = loc;
+                    }
+                }
+            } else {
+                // Estado cuando el dron está apagado o la base de datos está vacía
+                if(droneState) droneState.textContent = "Desconectado";
+                if(droneStatus) {
+                    droneStatus.textContent = "Sin señal";
+                    droneStatus.className = "card-status status-bad";
+                }
+                if(droneLocation) droneLocation.textContent = "—";
+                if(droneCoords) droneCoords.textContent = "Lat: — | Lon: —";
+            }
+        })
+        .catch(error => console.error("Error leyendo datos del backend:", error));
 }
 
 // ======================
-// ESTADO DEL DRON
+// INICIAR CICLO
 // ======================
-
-async function updateDroneStatus() {
-
-    try {
-
-        const res = await fetch(
-
-            GPS_URL,
-
-            {
-
-                cache: "no-store"
-
-            }
-
-        );
-
-        const data = await res.json();
-
-        if (!data.lat || !data.lon) {
-
-            throw "No fix";
-
-        }
-
-        droneState.textContent = "En operación";
-
-        droneStatus.textContent = "Activo";
-
-        droneStatus.className =
-
-            "card-status status-ok";
-
-        droneCoords.textContent =
-
-            `Lat: ${data.lat.toFixed(5)} | Lon: ${data.lon.toFixed(5)}`;
-
-        if (Date.now() - lastGeoTime > 15000) {
-
-            lastGeoTime = Date.now();
-
-            const loc = await getLocationName(
-
-                data.lat,
-
-                data.lon
-
-            );
-
-            droneLocation.textContent = loc;
-
-        }
-
-    }
-
-    catch {
-
-        droneState.textContent = "Desconectado";
-
-        droneStatus.textContent = "Sin señal";
-
-        droneStatus.className =
-
-            "card-status status-bad";
-
-        droneLocation.textContent = "—";
-
-        droneCoords.textContent =
-
-            "Lat: — | Lon: —";
-
-    }
-
-}
-
-// ======================
-// INICIAR
-// ======================
-
+// Arrancamos una sola vez y leemos el backend cada 2 segundos
 update();
-
-updateDroneStatus();
-
-setInterval(update, 3000);
-
-setInterval(updateDroneStatus, 5000);
+setInterval(update, 2000);
